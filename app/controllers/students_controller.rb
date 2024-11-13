@@ -1,16 +1,17 @@
 class StudentsController < ApplicationController
   def index
-    @students = Student.all.order({ :created_at => :desc })
+    matching_students = Student.all
+    @students = matching_students.order({ :created_at => :desc })
 
     render({ :template => "students/index" })
   end
 
   def show
     the_id = params.fetch("path_id")
-    @student = Student.where({:id => the_id }).at(0)
-
+    @student = Student.where(id: the_id).at(0)
     render({ :template => "students/show" })
   end
+  
 
   def create
     @student = Student.new
@@ -40,6 +41,7 @@ class StudentsController < ApplicationController
     else
       redirect_to("/students/#{@student.id}", { :alert => "Student failed to update successfully." })
     end
+
   end
 
   def destroy
@@ -50,4 +52,5 @@ class StudentsController < ApplicationController
 
     redirect_to("/students", { :notice => "Student deleted successfully."} )
   end
+
 end
